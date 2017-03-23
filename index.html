@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.min.js"></script>
+    <style>
+        *{
+            box-sizing:border-box;
+        }
+        .content{
+            display:flex;
+            flex-wrap: wrap;
+            width:300px;
+            height:300px;
+            border:1px solid #ddd;
+        }
+        .content>div{
+            text-align: center;
+            width:33.333%;
+            height:33.333%;
+            border:1px solid #ddd;
+            position:relative;
+
+            padding: 2%;
+        }
+        .block9>button{
+            margin-top:40px;
+        }
+        .current{
+            background:#2c7fdc;
+            background:red;
+            border-color:palevioletred;
+        }
+        [class^='block']>img{
+            width:100%;
+            height:100%;
+        }
+        /*.current .mask{
+            display:block;
+        }*/
+        .mask{
+            height:100%;
+            width:100%;
+            position:absolute;
+            top:0;
+            left:0;
+            background:url(img/cover.png) no-repeat;
+            background-size:100% 100%;
+            -webkit-background-size: 100% 100%;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <div id="1" class="block1"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div id="2" class="block2"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div id="3" class="block3"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div id="8" class="block8"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div class="block9">
+        <button>点击</button>
+    </div>
+    <div id="4" class="block4"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div id="7" class="block7"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div id="6" class="block6"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+    <div id="5" class="block5"><img src="img/tv1.png" alt=""><div class="mask"></div></div>
+</div>
+<script>
+    /*function randomNumber(){
+        var num=parseInt(Math.random()*9+40);
+        return num;
+    }
+    function start() {
+        var cur=$('.current').attr('id');
+        return cur;
+    }
+    /!*$('.block9').click(function(){
+        var num=randomNumber(),cur=start(),startTime=50;
+        for(i=cur;i<=cur+num;i++){}
+
+    });*!/
+    var num,cur=0,turns,timer,cut,second,click=false;
+    function move(){
+            click=true;
+            timer=setTimeout(function(){
+            second-=cut*10;
+            turns++;
+            cur++;
+            if(cur>8){
+                cur=1;
+            }
+            console.log($('.block'+cur).attr('id'),turns,second);
+            $('.block'+cur).addClass('current').siblings('.current').removeClass('current');
+            if(turns>=num){
+                clearTimeout(timer);
+                timer=null;
+                click=false;
+            }else{
+                if(second<=40){
+                    cut=0;
+                }
+                if(turns>num-12){
+                    cut=-2;
+                }
+                move();
+            }
+        },second);
+
+    }
+   $('.block9').click(function(){
+       $('.block'+(cur+1)).addClass('current');
+       if(!click){
+           num=randomNumber();cur=start();second=100;turns=0;cut=1;
+           move();
+       }
+   });*/
+    var award=['一台苹果笔记本','一台长虹彩电','一部iphone手机','一台SUV','环球七日游','英雄联盟全套皮肤','一台海尔冰箱'];
+    var round={
+        num:0,//需要转动的次数
+        cur:0,//初始化时第一个格子的index
+        turns:0,//已经转动的次数
+        second:100,//初始的时间间隔
+        timer:null,//一次定时器
+        click:false,//是否可以点击
+        cut:1,//时间增减倍数
+        start:function(){
+            var cur=$('.current').attr('id');
+            return cur;
+        },
+        randomNumber:function(){
+            var num=parseInt(Math.random()*9+40);
+            return num;
+        },
+        move:function(){
+            console.log('进入');
+            var that=this;
+            that.click = true;
+            that.timer = setTimeout(function () {
+                that.second -= that.cut * 10;
+                that.turns++;
+                that.cur++;
+                if (that.cur > 8) {
+                    that.cur = 1;
+                }
+                //console.log($('.block' + cur).attr('id'), turns, second);
+                console.log(that.turns,that.num);
+                $('.block' + that.cur).addClass('current').siblings('.current').removeClass('current');
+                if (that.turns >= that.num) {
+                    clearTimeout(that.timer);
+                    that.timer = null;
+                    that.click = false;
+                    switch (that.cur){
+                        case 1:alert('恭喜获得'+award[0]+'奖励');break;
+                        case 2:alert('很遗憾什么都没有！继续努力！');break;
+                        case 3:alert('恭喜获得'+award[1]+'奖励');break;
+                        case 4:alert('恭喜获得'+award[2]+'奖励');break;
+                        case 5:alert('恭喜获得'+award[3]+'奖励');break;
+                        case 6:alert('恭喜获得'+award[4]+'奖励');break;
+                        case 7:alert('恭喜获得'+award[5]+'奖励');break;
+                        case 8:alert('恭喜获得'+award[6]+'奖励');break;
+                    }
+                } else {
+                    //console.log('panduan');
+                    if (that.second <= 40) {
+                        that.cut = 0;
+                    }
+                    if (that.turns >that.num - 12) {
+                        that.cut = -2;
+                    }
+                    that.move();
+                }
+            }, that.second);
+        }
+    }
+    $('.block9').click(function(){
+        $('.block'+(round.cur+1)).addClass('current');
+        if(!round.click){
+            round.num=round.randomNumber();cur=round.start();round.second=100;round.turns=0;round.cut=1;
+            round.move();
+        }
+    });
+</script>
+</body>
+</html>
